@@ -8,6 +8,7 @@
   --muted: #6b7280;
   --border: #e2e8f0;
   --success: #10b981;
+  --error: #dc2626;
   --radius: 12px;
   --shadow: 0 4px 24px rgba(0, 133, 255, 0.10);
 }
@@ -64,6 +65,7 @@ main {
 /* ── Search form ─────────────────────────────────── */
 .search-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 
@@ -308,6 +310,26 @@ button:active {
   white-space: pre-wrap;
   word-break: break-word;
   margin-bottom: 0.75rem;
+}
+
+/* ── Auth status ─────────────────────────────────── */
+#auth-status {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  min-height: 1.2rem;
+}
+
+.auth-success {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.auth-error {
+  color: var(--error);
+}
+
+.auth-info {
+  color: var(--muted);
 }
 
 /* ── Utility ─────────────────────────────────────── */

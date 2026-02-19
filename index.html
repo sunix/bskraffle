@@ -17,6 +17,36 @@
 
 <main>
 
+  <!-- Auth card -->
+  <div class="card">
+    <p class="section-title">0. Connect to Bluesky</p>
+    <p style="font-size:0.9rem;color:var(--muted);margin-bottom:1rem;">
+      Enter your Bluesky handle and an
+      <a href="https://bsky.app/settings/app-passwords" target="_blank" rel="noopener noreferrer">App Password</a>
+      to authenticate. Your credentials are only used to call the Bluesky API
+      and are never stored.
+    </p>
+    <div class="search-row">
+      <input
+        id="handle-input"
+        type="text"
+        placeholder="yourhandle.bsky.social"
+        aria-label="Bluesky handle"
+        autocomplete="username"
+        spellcheck="false"
+      />
+      <input
+        id="password-input"
+        type="password"
+        placeholder="App Password"
+        aria-label="App Password"
+        autocomplete="current-password"
+      />
+      <button id="login-btn" class="btn-primary">Connect</button>
+    </div>
+    <div id="auth-status" aria-live="polite"></div>
+  </div>
+
   <!-- Search card -->
   <div class="card">
     <p class="section-title">1. Find eligible posts</p>
@@ -34,7 +64,7 @@
         autocomplete="off"
         spellcheck="false"
       />
-      <button id="search-btn" class="btn-primary">Search</button>
+      <button id="search-btn" class="btn-primary" disabled>Search</button>
     </div>
 
     <div id="error-msg" class="error-msg hidden" role="alert"></div>
