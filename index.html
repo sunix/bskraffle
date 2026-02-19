@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BSKRaffle – Bluesky Post Raffle</title>
+  <meta name="description"
+        content="Run a raffle on Bluesky posts. Search by hashtag, pick a random winner from posts at least 1 week old with an image, and share the result mentioning @parisjug.org." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header>
+  <h1>🎟️ BSKRaffle</h1>
+  <p>Run a raffle on Bluesky posts</p>
+</header>
+
+<main>
+
+  <!-- Search card -->
+  <div class="card">
+    <p class="section-title">1. Find eligible posts</p>
+    <p style="font-size:0.9rem;color:var(--muted);margin-bottom:1rem;">
+      Enter a hashtag (e.g. <code>#JavaChampions</code>) or keyword. Only posts
+      that are <strong>at least 1 week old</strong> and contain an
+      <strong>image</strong> will enter the raffle.
+    </p>
+    <div class="search-row">
+      <input
+        id="search-input"
+        type="text"
+        placeholder="#hashtag or keyword"
+        aria-label="Hashtag or keyword to search"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button id="search-btn" class="btn-primary">Search</button>
+    </div>
+
+    <div id="error-msg" class="error-msg hidden" role="alert"></div>
+    <div id="status" class="info-row" aria-live="polite"></div>
+  </div>
+
+  <!-- Raffle card -->
+  <div class="card">
+    <p class="section-title">2. Pick a winner</p>
+    <p style="font-size:0.9rem;color:var(--muted);margin-bottom:1rem;">
+      Click the button to randomly select one post from the eligible pool.
+      The announcement will mention the winner and
+      <strong>@parisjug.org</strong>.
+    </p>
+    <button id="raffle-btn" class="btn-raffle" disabled>
+      🎲 Pick a winner!
+    </button>
+  </div>
+
+  <!-- Winner section (hidden until a winner is picked) -->
+  <div id="winner-section" class="hidden" aria-live="polite"></div>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
