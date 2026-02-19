@@ -1,0 +1,328 @@
+/* BSKRaffle – Bluesky Raffle App */
+:root {
+  --sky: #0085ff;
+  --sky-dark: #0066cc;
+  --bg: #f0f4f8;
+  --card: #ffffff;
+  --text: #1a1a2e;
+  --muted: #6b7280;
+  --border: #e2e8f0;
+  --success: #10b981;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0, 133, 255, 0.10);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── Header ─────────────────────────────────────── */
+header {
+  background: var(--sky);
+  color: #fff;
+  padding: 1.5rem 1rem 1.2rem;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+header p {
+  margin-top: 0.3rem;
+  opacity: 0.88;
+  font-size: 0.95rem;
+}
+
+/* ── Main container ──────────────────────────────── */
+main {
+  max-width: 680px;
+  margin: 2rem auto;
+  padding: 0 1rem 4rem;
+}
+
+/* ── Card ────────────────────────────────────────── */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Search form ─────────────────────────────────── */
+.search-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.search-row input {
+  flex: 1;
+  padding: 0.65rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-row input:focus {
+  border-color: var(--sky);
+}
+
+/* ── Buttons ─────────────────────────────────────── */
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.65rem 1.2rem;
+  transition: background 0.2s, transform 0.1s;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--sky);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--sky-dark);
+}
+
+.btn-primary:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-raffle {
+  width: 100%;
+  background: linear-gradient(135deg, #0085ff 0%, #7c3aed 100%);
+  color: #fff;
+  font-size: 1.15rem;
+  padding: 0.85rem;
+  border-radius: 10px;
+  margin-top: 0.5rem;
+}
+
+.btn-raffle:hover {
+  opacity: 0.92;
+}
+
+.btn-raffle:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-share {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--sky);
+  color: #fff;
+  border-radius: 8px;
+  padding: 0.65rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.btn-share:hover {
+  background: var(--sky-dark);
+}
+
+/* ── Status / info ───────────────────────────────── */
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-top: 1rem;
+}
+
+.badge {
+  background: #dbeafe;
+  color: var(--sky-dark);
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0.15rem 0.65rem;
+  font-size: 0.85rem;
+}
+
+/* ── Spinner ─────────────────────────────────────── */
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 3px solid var(--border);
+  border-top-color: var(--sky);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Error ───────────────────────────────────────── */
+.error-msg {
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+}
+
+/* ── Winner card ─────────────────────────────────── */
+#winner-section {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.winner-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.winner-header img.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.winner-header .author-info .display-name {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.winner-header .author-info .handle {
+  color: var(--muted);
+  font-size: 0.87rem;
+}
+
+.winner-header .post-date {
+  margin-left: auto;
+  font-size: 0.82rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.post-text {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  margin-bottom: 1rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.post-image {
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+  max-height: 360px;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.post-image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.post-image-grid img {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+  aspect-ratio: 4/3;
+}
+
+.winner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  align-items: center;
+}
+
+.original-link {
+  color: var(--sky);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* ── Compose preview ─────────────────────────────── */
+.compose-box {
+  background: #f0f9ff;
+  border: 1.5px solid #bae6fd;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.compose-box label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--sky-dark);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.compose-text {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-bottom: 0.75rem;
+}
+
+/* ── Utility ─────────────────────────────────────── */
+.hidden {
+  display: none !important;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+.confetti {
+  font-size: 1.8rem;
+  margin-right: 0.3rem;
+}
