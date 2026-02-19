@@ -122,7 +122,7 @@ async function fetchPosts(query, maxPosts = 200) {
     const params = new URLSearchParams({ q: query, limit: "100" });
     if (cursor) params.set("cursor", cursor);
 
-    const res = await fetch(`${BSKY_API}/app.bsky.feed.searchPosts?${params}`, { headers });
+    const res = await fetch(`${BSKY_AUTH_API}/app.bsky.feed.searchPosts?${params}`, { headers });
     if (!res.ok) {
       const body = await res.text();
       throw new Error(`Bluesky API error ${res.status}: ${body}`);
