@@ -72,11 +72,11 @@ function hasImage(post) {
 }
 
 /**
- * Returns true when the post is at least 1 week old.
+ * Returns true when the post is from within the last week.
  */
-function isOldEnough(post) {
+function isFromThisWeek(post) {
   const created = new Date(post.record.createdAt || post.indexedAt);
-  return (Date.now() - created.getTime()) >= ONE_WEEK_MS;
+  return (Date.now() - created.getTime()) <= ONE_WEEK_MS;
 }
 
 /**
@@ -291,18 +291,18 @@ searchBtn.addEventListener("click", async () => {
 
   try {
     const allPosts = await fetchPosts(query);
-    eligiblePosts = allPosts.filter(p => hasImage(p) && isOldEnough(p));
+    eligiblePosts = allPosts.filter(p => hasImage(p) && isFromThisWeek(p));
 
     if (eligiblePosts.length === 0) {
       setStatus(
         `<span>No eligible posts found for <strong>${escHtml(query)}</strong>. ` +
-        `Posts must be at least 1 week old and contain an image.</span>`
+        `Posts must be from this week and contain an image.</span>`
       );
     } else {
       setStatus(
         `<span>Found <span class="badge">${eligiblePosts.length}</span> ` +
         `eligible post${eligiblePosts.length !== 1 ? "s" : ""} ` +
-        `(with image, ≥ 1 week old) out of ${allPosts.length} total for ` +
+        `(with image, from this week) out of ${allPosts.length} total for ` +
         `<strong>${escHtml(query)}</strong>. Ready to raffle!</span>`
       );
       raffleBtn.disabled = false;
