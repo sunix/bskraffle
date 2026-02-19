@@ -1,14 +1,20 @@
 /* BSKRaffle – Bluesky Raffle App */
 
 const BSKY_API = "https://public.api.bsky.app/xrpc";
+const BSKY_AUTH_API = "https://bsky.social/xrpc";
 const MENTION_HANDLE = "parisjug.org";
 const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 
 // ── State ──────────────────────────────────────────
 let eligiblePosts = [];
 let currentWinner = null;
+let accessJwt = null;
 
 // ── DOM refs ───────────────────────────────────────
+const handleInput     = document.getElementById("handle-input");
+const passwordInput   = document.getElementById("password-input");
+const loginBtn        = document.getElementById("login-btn");
+const authStatus      = document.getElementById("auth-status");
 const searchInput     = document.getElementById("search-input");
 const searchBtn       = document.getElementById("search-btn");
 const statusDiv       = document.getElementById("status");
@@ -17,6 +23,24 @@ const winnerSection   = document.getElementById("winner-section");
 const errorDiv        = document.getElementById("error-msg");
 
 // ── Helpers ────────────────────────────────────────
+
+/**
+ * Authenticate with Bluesky using handle + App Password.
+ * Stores the access JWT for subsequent API calls.
+ */
+async function login(handle, appPassword) {
+  const res = await fetch(`${BSKY_AUTH_API}/com.atproto.server.createSession`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ identifier: handle, password: appPassword }),
+  });
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`Authentication failed (${res.status}): ${body}`);
+  }
+  const data = await res.json();
+  accessJwt = data.accessJwt;
+}
 
 function showError(msg) {
   errorDiv.textContent = msg;
@@ -92,12 +116,13 @@ function postUrl(post) {
 async function fetchPosts(query, maxPosts = 200) {
   const posts = [];
   let cursor = null;
+  const headers = { "Authorization": `Bearer ${accessJwt}` };
 
   while (posts.length < maxPosts) {
     const params = new URLSearchParams({ q: query, limit: "100" });
     if (cursor) params.set("cursor", cursor);
 
-    const res = await fetch(`${BSKY_API}/app.bsky.feed.searchPosts?${params}`);
+    const res = await fetch(`${BSKY_API}/app.bsky.feed.searchPosts?${params}`, { headers });
     if (!res.ok) {
       const body = await res.text();
       throw new Error(`Bluesky API error ${res.status}: ${body}`);
@@ -206,6 +231,45 @@ function escHtml(str) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 }
+
+// ── Event: Login ───────────────────────────────────
+
+loginBtn.addEventListener("click", async () => {
+  const handle = handleInput.value.trim();
+  const password = passwordInput.value.trim();
+  if (!handle || !password) {
+    authStatus.textContent = "Please enter both your handle and App Password.";
+    authStatus.className = "auth-error";
+    return;
+  }
+  loginBtn.disabled = true;
+  authStatus.textContent = "Connecting…";
+  authStatus.className = "auth-info";
+  let success = false;
+  try {
+    await login(handle, password);
+    success = true;
+    authStatus.textContent = `✓ Connected as @${handle}`;
+    authStatus.className = "auth-success";
+    handleInput.disabled = true;
+    passwordInput.value = "";
+    passwordInput.disabled = true;
+    searchBtn.disabled = false;
+    searchInput.focus();
+  } catch (err) {
+    authStatus.textContent = err.message;
+    authStatus.className = "auth-error";
+  } finally {
+    if (!success) loginBtn.disabled = false;
+  }
+});
+
+// Allow pressing Enter in the login inputs
+[handleInput, passwordInput].forEach(el => {
+  el.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") loginBtn.click();
+  });
+});
 
 // ── Event: Search ──────────────────────────────────
 
